@@ -1,3 +1,4 @@
+tool
 var matrix = set_identity()
 
 func set_identity():
@@ -164,8 +165,8 @@ func test_point(p_planes, p_point):
 			
 	return true
 	
-func test_aabb(p_planes, p_aabb):
-	if(test_point(p_planes, p_aabb.pos) == false and test_point(p_planes, p_aabb.end) == false):
+func test_rect3(p_planes, p_rect3):
+	if(test_point(p_planes, p_rect3.pos) == false and test_point(p_planes, p_rect3.end) == false):
 		return false
 	else:
 		return true

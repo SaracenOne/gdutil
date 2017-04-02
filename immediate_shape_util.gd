@@ -14,47 +14,47 @@ static func create_debug_immediate():
 	immediate_geometry.set_material_override(material)
 	return immediate_geometry
 
-static func immediate_cube(p_aabb, p_immediate_geometry):
+static func immediate_cube(p_rect3, p_immediate_geometry):
 	p_immediate_geometry.begin(Mesh.PRIMITIVE_LINES)
 	
-	var aabb_min = p_aabb.pos
-	var aabb_max = p_aabb.pos + p_aabb.size
+	var rect3_min = p_rect3.pos
+	var rect3_max = p_rect3.end
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_min.y, aabb_min.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_max.y, aabb_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_min.y, rect3_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_max.y, rect3_min.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_min.y, aabb_min.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_min.y, aabb_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_min.y, rect3_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_min.y, rect3_min.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_max.y, aabb_min.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_max.y, aabb_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_max.y, rect3_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_max.y, rect3_min.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_min.y, aabb_min.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_max.y, aabb_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_min.y, rect3_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_max.y, rect3_min.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_min.y, aabb_min.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_min.y, aabb_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_min.y, rect3_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_min.y, rect3_max.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_max.y, aabb_min.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_max.y, aabb_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_max.y, rect3_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_max.y, rect3_max.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_min.y, aabb_max.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_max.y, aabb_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_min.y, rect3_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_max.y, rect3_max.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_min.y, aabb_max.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_min.y, aabb_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_min.y, rect3_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_min.y, rect3_max.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_max.x, aabb_max.y, aabb_max.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_max.y, aabb_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_max.x, rect3_max.y, rect3_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_max.y, rect3_max.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_min.y, aabb_max.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_max.y, aabb_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_min.y, rect3_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_max.y, rect3_max.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_min.y, aabb_max.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_min.y, aabb_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_min.y, rect3_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_min.y, rect3_min.z))
 	
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_max.y, aabb_max.z))
-	p_immediate_geometry.add_vertex(Vector3(aabb_min.x, aabb_max.y, aabb_min.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_max.y, rect3_max.z))
+	p_immediate_geometry.add_vertex(Vector3(rect3_min.x, rect3_max.y, rect3_min.z))
 	
 	p_immediate_geometry.end()
 

@@ -1,3 +1,4 @@
+tool
 extends Reference
 
 const SEARCH_ALL_DIRS = 0
