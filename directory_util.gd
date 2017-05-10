@@ -4,6 +4,22 @@ extends Reference
 const SEARCH_ALL_DIRS = 0
 const SEARCH_LOCAL_DIR_ONLY = 1
 
+static func get_files_in_directory_path(p_path):
+	var files = []
+	var dir = Directory.new()
+	if(dir.open(path) == OK):
+		dir.list_dir_begin()
+		
+		while(true):
+			var file = dir.get_next()
+			if(file == ""):
+				break
+			elif not(file.begins_with(".")) and not(dir.current_is_dir()):
+				files.append(file)
+				
+		dir.list_dir_end()
+	return files
+
 static func get_files(p_directory, current_dir_path, p_search_pattern, p_search_options):
 	p_directory.list_dir_begin()
 	var current_file_name = ""

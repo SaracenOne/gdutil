@@ -1,6 +1,6 @@
 tool
 
-static func create_debug_immediate():
+static func create_debug_immediate(p_skip_depth_test=false):
 	var immediate_geometry = ImmediateGeometry.new()
 	immediate_geometry.set_cast_shadows_setting(GeometryInstance.SHADOW_CASTING_SETTING_OFF)
 	immediate_geometry.set_flag(GeometryInstance.FLAG_RECEIVE_SHADOWS, false)
@@ -9,7 +9,8 @@ static func create_debug_immediate():
 	material.set_fixed_flag(FixedMaterial.FLAG_USE_ALPHA, true)
 	material.set_flag(Material.FLAG_UNSHADED, true)
 	material.set_depth_draw_mode(Material.DEPTH_DRAW_NEVER)
-	material.set_depth_test_mode(Material.DEPTH_TEST_MODE_ALWAYS)
+	if p_skip_depth_test:
+		material.set_depth_test_mode(Material.DEPTH_TEST_MODE_ALWAYS)
 	
 	immediate_geometry.set_material_override(material)
 	return immediate_geometry
