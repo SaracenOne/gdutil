@@ -7,7 +7,7 @@ const SEARCH_LOCAL_DIR_ONLY = 1
 static func get_files_in_directory_path(p_path):
 	var files = []
 	var dir = Directory.new()
-	if(dir.open(path) == OK):
+	if(dir.open(p_path) == OK):
 		dir.list_dir_begin()
 		
 		while(true):
