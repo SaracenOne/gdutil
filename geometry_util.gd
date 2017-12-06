@@ -1,5 +1,11 @@
 tool
 
+static func test_point_with_planes(p_point, p_planes):
+	for plane in p_planes:
+		if(plane.is_point_over(p_point)):
+			return false
+	return true
+
 static func test_aabb_with_planes(p_aabb, p_planes):
 	for plane in p_planes:
 		if(plane.is_point_over(p_aabb.pos) and plane.is_point_over(p_aabb.end)):
