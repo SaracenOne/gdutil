@@ -157,16 +157,3 @@ func set_orthogonal(p_left, p_right, p_bottom, p_top,  p_znear, p_zfar):
 	matrix[10] = -2.0/(p_zfar-p_znear)
 	matrix[14] = -((p_zfar+p_znear)/(p_zfar-p_znear))
 	matrix[15] = 1.0
-	
-func test_point(p_planes, p_point):
-	for camera_plane in p_planes:
-		if(camera_plane.is_point_over(p_point)):
-			return false
-			
-	return true
-	
-func test_rect3(p_planes, p_rect3):
-	if(test_point(p_planes, p_rect3.pos) == false and test_point(p_planes, p_rect3.end) == false):
-		return false
-	else:
-		return true
