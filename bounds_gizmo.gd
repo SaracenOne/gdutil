@@ -46,7 +46,7 @@ func set_handle(p_idx, p_camera, p_point):
 	aabb.size[p_idx] = d * 2
 	spatial.set_bounds(aabb)
 		
-func commit_handle(p_idx, p_restore, p_cancel):
+func commit_handle(p_idx, p_restore, p_cancel = false):
 	if (p_cancel):
 		spatial.set_bonuds(p_restore) # !
 		return

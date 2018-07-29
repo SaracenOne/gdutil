@@ -6,7 +6,7 @@ static func create_icon_material(p_name, p_texture, p_albedo):
 
 	var color = p_albedo
 
-	var icon = SpatialMaterial()
+	var icon = SpatialMaterial.new()
 	icon.set_flag(SpatialMaterial.FLAG_UNSHADED, true)
 	icon.set_cull_mode(SpatialMaterial.CULL_DISABLED)
 	icon.set_depth_draw_mode(SpatialMaterial.DEPTH_DRAW_DISABLED)
