@@ -1,9 +1,6 @@
 tool
 
-static func create_icon_material(p_name, p_texture, p_albedo):
-
-	var name = p_name
-
+static func create_icon_material(p_texture, p_albedo):
 	var color = p_albedo
 
 	var icon = SpatialMaterial.new()
@@ -33,14 +30,14 @@ static func create_debug_material(p_color):
 	
 	return material
 
-static func create_debug_immediate(p_skip_depth_test=false):
+static func create_debug_immediate():
 	var immediate_geometry = ImmediateGeometry.new()
-	#immediate_geometry.set_cast_shadows_setting(GeometryInstance.SHADOW_CASTING_SETTING_OFF)
-	#immediate_geometry.set_flag(GeometryInstance.FLAG_RECEIVE_SHADOWS, false)
+	immediate_geometry.set_cast_shadows_setting(GeometryInstance.SHADOW_CASTING_SETTING_OFF)
+	immediate_geometry.set_flag(GeometryInstance.FLAG_RECEIVE_SHADOWS, false)
 	
 	var material = create_debug_material(Color(1.0, 1.0, 1.0))
 	
-	#immediate_geometry.set_material_override(material)
+	immediate_geometry.set_material_override(material)
 	return immediate_geometry
 
 static func immediate_cube(p_rect3, p_immediate_geometry):
