@@ -118,7 +118,7 @@ func redraw():
 		
 	add_lines(lines, material)
 	add_collision_segments(lines)
-	add_handles(handles)
+	add_handles(handles, material)
 	
 func _init(p_spatial, p_plugin, p_color):
 	spatial = p_spatial

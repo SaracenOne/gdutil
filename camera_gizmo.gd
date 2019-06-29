@@ -50,7 +50,7 @@ func set_handle(p_idx, p_camera, p_point):
 	camera.set("fov", a);
 	camera.property_list_changed_notify()
 
-func commit_handle(p_idx, p_restore, p_cancel):
+func commit_handle(p_idx, p_restore, p_cancel = false):
 	if (p_cancel):
 		camera.set("fov", p_restore)
 	else:
@@ -96,7 +96,7 @@ func redraw():
 
 	add_lines(lines, material)
 	add_collision_segments(lines)
-	add_handles(handles)
+	add_handles(handles, material)
 
 func _init(p_camera, p_plugin, p_color):
 	camera = p_camera
