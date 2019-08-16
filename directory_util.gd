@@ -45,7 +45,7 @@ static func get_files(p_directory : Directory, current_dir_path : String, p_sear
 		
 	return valid_files
 	
-static func delete_dir_and_contents(p_directory : Directory, current_dir_path : String, p_delete_root : bool) -> Array:
+static func delete_dir_and_contents(p_directory : Directory, current_dir_path : String, p_delete_root : bool) -> int:
 	p_directory.list_dir_begin()
 	var current_file_name : String = ""
 	var all_deleted : int = OK
