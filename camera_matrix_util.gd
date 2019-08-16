@@ -1,8 +1,8 @@
 tool
-var matrix : PoolIntArray = PoolIntArray([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+var matrix : PoolRealArray = PoolRealArray([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
 
 func set_identity() -> void:
-	matrix = PoolIntArray([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+	matrix = PoolRealArray([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
 	
 static func get_fovy(p_fovx : float, p_aspect : float) -> float:
 	return rad2deg(atan(p_aspect * tan(deg2rad(p_fovx) * 0.5)) * 2.0)
