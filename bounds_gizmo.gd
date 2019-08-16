@@ -2,11 +2,11 @@ extends EditorSpatialGizmo
 
 const immediate_shape_util_const = preload("immediate_shape_util.gd")
 
-var plugin = null
-var spatial = null
-var color = Color()
+var plugin : EditorSpatialGizmoPlugin = null
+var spatial : Node = null
+var color : Color = Color()
 
-func get_handle_name(p_idx):
+func get_handle_name(p_idx : int) -> String:
 	if p_idx == 0:
 		return "X"
 	elif p_idx == 1:
@@ -16,29 +16,29 @@ func get_handle_name(p_idx):
 
 	return ""
 		
-func get_handle_value(p_idx):
+func get_handle_value(p_idx : int) -> Vector3:
 	return spatial.get_bounds().size * 2
 		
-func set_handle(p_idx, p_camera, p_point):
-	var gt = spatial.get_global_transform()
+func set_handle(p_idx : int, p_camera : Camera, p_point : Vector2) -> void:
+	var gt : Transform = spatial.get_global_transform()
 	gt = gt.orthonormalized()
-	var gi = gt.affine_inverse()
+	var gi : Transform = gt.affine_inverse()
 	
-	var aabb = spatial.get_bounds()
-	var ray_from = p_camera.project_ray_origin(p_point)
-	var ray_dir = p_camera.project_ray_normal(p_point)
+	var aabb : AABB = spatial.get_bounds()
+	var ray_from : Vector3 = p_camera.project_ray_origin(p_point)
+	var ray_dir : Vector3 = p_camera.project_ray_normal(p_point)
 
 	var sg = [gi.xform(ray_from), gi.xform(ray_from + ray_dir * 4096)]
 	var ofs = aabb.position + aabb.size * 0.5
 
-	var axis = Vector3()
+	var axis : Vector3 = Vector3()
 	axis[p_idx] = 1.0;
 		
-	var result = Geometry.get_closest_points_between_segments(ofs, ofs + axis * 4096, sg[0], sg[1])
-	var ra = result[0]
-	var rb = result[1]
+	var result : PoolVector3Array = Geometry.get_closest_points_between_segments(ofs, ofs + axis * 4096, sg[0], sg[1])
+	var ra : Vector3 = result[0]
+	var rb : Vector3 = result[1]
 
-	var d = ra[p_idx]
+	var d : float = ra[p_idx]
 	if (d < 0.001):
 		d = 0.001
 		
@@ -46,73 +46,73 @@ func set_handle(p_idx, p_camera, p_point):
 	aabb.size[p_idx] = d * 2
 	spatial.set_bounds(aabb)
 		
-func commit_handle(p_idx, p_restore, p_cancel = false):
+func commit_handle(p_idx : int, p_restore : bool, p_cancel : bool = false) -> void:
 	if (p_cancel):
-		spatial.set_bonuds(p_restore) # !
+		spatial.set_bounds(p_restore) # !
 		return
 
-	var ur = plugin.get_undo_redo()
+	var ur : UndoRedo = plugin.get_undo_redo()
 	ur.create_action(tr("Change Box Shape Bounds"))
 	ur.add_do_method(spatial, "set_bounds", spatial.get_bounds())
 	ur.add_undo_method(spatial, "set_bounds", p_restore) # !
 	ur.commit_action()
 		
-static func get_lines(p_bounds):
+static func get_lines(p_bounds : AABB) -> PoolVector3Array:
 	var lines = PoolVector3Array()
 	
-	var rect3_min = p_bounds.position
-	var rect3_max = p_bounds.end
+	var aabb_min : Vector3 = p_bounds.position
+	var aabb_max : Vector3 = p_bounds.end
 	
-	lines.append(Vector3(rect3_min.x, rect3_min.y, rect3_min.z))
-	lines.append(Vector3(rect3_min.x, rect3_max.y, rect3_min.z))
+	lines.append(Vector3(aabb_min.x, aabb_min.y, aabb_min.z))
+	lines.append(Vector3(aabb_min.x, aabb_max.y, aabb_min.z))
 	
-	lines.append(Vector3(rect3_min.x, rect3_min.y, rect3_min.z))
-	lines.append(Vector3(rect3_max.x, rect3_min.y, rect3_min.z))
+	lines.append(Vector3(aabb_min.x, aabb_min.y, aabb_min.z))
+	lines.append(Vector3(aabb_max.x, aabb_min.y, aabb_min.z))
 	
-	lines.append(Vector3(rect3_min.x, rect3_max.y, rect3_min.z))
-	lines.append(Vector3(rect3_max.x, rect3_max.y, rect3_min.z))
+	lines.append(Vector3(aabb_min.x, aabb_max.y, aabb_min.z))
+	lines.append(Vector3(aabb_max.x, aabb_max.y, aabb_min.z))
 	
-	lines.append(Vector3(rect3_max.x, rect3_min.y, rect3_min.z))
-	lines.append(Vector3(rect3_max.x, rect3_max.y, rect3_min.z))
+	lines.append(Vector3(aabb_max.x, aabb_min.y, aabb_min.z))
+	lines.append(Vector3(aabb_max.x, aabb_max.y, aabb_min.z))
 	
-	lines.append(Vector3(rect3_max.x, rect3_min.y, rect3_min.z))
-	lines.append(Vector3(rect3_max.x, rect3_min.y, rect3_max.z))
+	lines.append(Vector3(aabb_max.x, aabb_min.y, aabb_min.z))
+	lines.append(Vector3(aabb_max.x, aabb_min.y, aabb_max.z))
 	
-	lines.append(Vector3(rect3_max.x, rect3_max.y, rect3_min.z))
-	lines.append(Vector3(rect3_max.x, rect3_max.y, rect3_max.z))
+	lines.append(Vector3(aabb_max.x, aabb_max.y, aabb_min.z))
+	lines.append(Vector3(aabb_max.x, aabb_max.y, aabb_max.z))
 	
-	lines.append(Vector3(rect3_max.x, rect3_min.y, rect3_max.z))
-	lines.append(Vector3(rect3_max.x, rect3_max.y, rect3_max.z))
+	lines.append(Vector3(aabb_max.x, aabb_min.y, aabb_max.z))
+	lines.append(Vector3(aabb_max.x, aabb_max.y, aabb_max.z))
 	
-	lines.append(Vector3(rect3_max.x, rect3_min.y, rect3_max.z))
-	lines.append(Vector3(rect3_min.x, rect3_min.y, rect3_max.z))
+	lines.append(Vector3(aabb_max.x, aabb_min.y, aabb_max.z))
+	lines.append(Vector3(aabb_min.x, aabb_min.y, aabb_max.z))
 	
-	lines.append(Vector3(rect3_max.x, rect3_max.y, rect3_max.z))
-	lines.append(Vector3(rect3_min.x, rect3_max.y, rect3_max.z))
+	lines.append(Vector3(aabb_max.x, aabb_max.y, aabb_max.z))
+	lines.append(Vector3(aabb_min.x, aabb_max.y, aabb_max.z))
 	
-	lines.append(Vector3(rect3_min.x, rect3_min.y, rect3_max.z))
-	lines.append(Vector3(rect3_min.x, rect3_max.y, rect3_max.z))
+	lines.append(Vector3(aabb_min.x, aabb_min.y, aabb_max.z))
+	lines.append(Vector3(aabb_min.x, aabb_max.y, aabb_max.z))
 	
-	lines.append(Vector3(rect3_min.x, rect3_min.y, rect3_max.z))
-	lines.append(Vector3(rect3_min.x, rect3_min.y, rect3_min.z))
+	lines.append(Vector3(aabb_min.x, aabb_min.y, aabb_max.z))
+	lines.append(Vector3(aabb_min.x, aabb_min.y, aabb_min.z))
 	
-	lines.append(Vector3(rect3_min.x, rect3_max.y, rect3_max.z))
-	lines.append(Vector3(rect3_min.x, rect3_max.y, rect3_min.z))
+	lines.append(Vector3(aabb_min.x, aabb_max.y, aabb_max.z))
+	lines.append(Vector3(aabb_min.x, aabb_max.y, aabb_min.z))
 	
 	return lines
 		
-func redraw():
+func redraw() -> void:
 	clear()
 
-	var material = immediate_shape_util_const.create_debug_material(color)
+	var material : SpatialMaterial = immediate_shape_util_const.create_debug_material(color)
 
-	var bounds = spatial.get_bounds()
+	var bounds : AABB = spatial.get_bounds()
 	var lines = get_lines(bounds)
 	
-	var handles = PoolVector3Array()
+	var handles : PoolVector3Array = PoolVector3Array()
 	
 	for i in range(0, 3):
-		var ax = Vector3()
+		var ax : Vector3 = Vector3()
 		ax[i] = bounds.position[i] + bounds.size[i]
 		handles.push_back(ax)
 		
@@ -120,7 +120,7 @@ func redraw():
 	add_collision_segments(lines)
 	add_handles(handles, material)
 	
-func _init(p_spatial, p_plugin, p_color):
+func _init(p_spatial : Node, p_plugin : EditorSpatialGizmoPlugin, p_color : Color) -> void:
 	spatial = p_spatial
 	plugin = p_plugin
 	color = p_color

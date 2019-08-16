@@ -1,17 +1,19 @@
 tool
 extends Reference
 
-const SEARCH_ALL_DIRS = 0
-const SEARCH_LOCAL_DIR_ONLY = 1
+enum directory_search_options {
+	SEARCH_ALL_DIRS,
+	SEARCH_LOCAL_DIR_ONLY
+}
 
-static func get_files_in_directory_path(p_path):
-	var files = []
-	var dir = Directory.new()
+static func get_files_in_directory_path(p_path : String) -> Array:
+	var files : Array = []
+	var dir : Directory = Directory.new()
 	if(dir.open(p_path) == OK):
 		dir.list_dir_begin()
 		
 		while(true):
-			var file = dir.get_next()
+			var file : String = dir.get_next()
 			if(file == ""):
 				break
 			elif not(file.begins_with(".")) and not(dir.current_is_dir()):
@@ -20,16 +22,16 @@ static func get_files_in_directory_path(p_path):
 		dir.list_dir_end()
 	return files
 
-static func get_files(p_directory, current_dir_path, p_search_pattern, p_search_options):
+static func get_files(p_directory : Directory, current_dir_path : String, p_search_pattern : String, p_search_options : int) -> Array:
 	p_directory.list_dir_begin()
-	var current_file_name = ""
-	var valid_files = []
+	var current_file_name : String = ""
+	var valid_files : Array = []
 	current_file_name = p_directory.get_next()
 	
 	while(current_file_name.empty() == false):
 		if(p_directory.current_is_dir()):
 			if(current_file_name != "." and current_file_name != ".."):
-				if(p_search_options == SEARCH_ALL_DIRS):
+				if(p_search_options == directory_search_options.SEARCH_ALL_DIRS):
 					var sub_directory = Directory.new()
 					if(sub_directory.open(current_file_name)):
 						var appendable_files = get_files(sub_directory, current_dir_path + '/' + current_file_name, p_search_pattern, p_search_options)
@@ -43,16 +45,16 @@ static func get_files(p_directory, current_dir_path, p_search_pattern, p_search_
 		
 	return valid_files
 	
-static func delete_dir_and_contents(p_directory, current_dir_path, p_delete_root):
+static func delete_dir_and_contents(p_directory : Directory, current_dir_path : String, p_delete_root : bool) -> Array:
 	p_directory.list_dir_begin()
-	var current_file_name = ""
-	var all_deleted = OK
+	var current_file_name : String = ""
+	var all_deleted : int = OK
 	current_file_name = p_directory.get_next()
 	
 	while(current_file_name.empty() == false):
 		if(p_directory.current_is_dir()):
 			if(current_file_name != "." and current_file_name != ".."):
-				var sub_directory = Directory.new()
+				var sub_directory : Directory = Directory.new()
 				if(sub_directory.open(current_file_name)):
 					if(delete_dir_and_contents(p_directory, current_dir_path + '/' + current_file_name, false) == FAILED):
 							all_deleted = FAILED
