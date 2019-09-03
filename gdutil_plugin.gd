@@ -2,7 +2,7 @@ tool
 extends EditorPlugin
 
 func _enter_tree() -> void:
-	pass
+	add_autoload_singleton("ConnectionUtil", "res://addons/gdutil/connection_util.gd")
 	
 func _exit_tree() -> void:
-	pass
+	remove_autoload_singleton("ConnectionUtil")
