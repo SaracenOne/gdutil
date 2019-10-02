@@ -1,3 +1,5 @@
+tool
+
 static func string_ends_with(p_main_string : String, p_end_string : String) -> bool:
 	var pos : int = p_main_string.find_last(p_end_string)
 	if (pos==-1):
@@ -21,3 +23,13 @@ static func fixstr(p_what : String, p_str : String) -> String:
 	if(p_what.to_lower().ends_with("_" + p_str)):
 		return p_what.substr(0,p_what.length()-(p_str.length() + 1))
 	return p_what
+
+static func convert_string_pool_array_into_hint_string(p_array : PoolStringArray) -> String:
+	var result : String = ""
+	
+	for i in range(0, p_array.size()):
+		if (i != 0):
+			result += ","
+		result += p_array[i]
+
+	return result
