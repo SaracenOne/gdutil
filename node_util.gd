@@ -21,3 +21,12 @@ static func spatial_calculate_global_transform(p_spatial : Spatial) -> Transform
 	else:
 		return p_spatial.transform
 		
+static func spatial_calculate_global_transform_from_root(p_spatial : Spatial, p_root : Spatial) -> Transform:
+	var parent : Spatial = p_spatial.get_parent_spatial()
+	if parent:
+		print(parent.get_name())
+	if parent and parent != p_root:
+		return spatial_calculate_global_transform_from_root(parent, p_root) * p_spatial.transform
+	else:
+		return p_spatial.transform
+		
