@@ -28,7 +28,7 @@ static func get_files(p_directory : Directory, current_dir_path : String, p_sear
 	var valid_files : Array = []
 	current_file_name = p_directory.get_next()
 	
-	while(current_file_name.empty() == false):
+	while(!current_file_name.empty()):
 		if(p_directory.current_is_dir()):
 			if(current_file_name != "." and current_file_name != ".."):
 				if(p_search_options == directory_search_options.SEARCH_ALL_DIRS):
@@ -51,7 +51,7 @@ static func delete_dir_and_contents(p_directory : Directory, current_dir_path : 
 	var all_deleted : int = OK
 	current_file_name = p_directory.get_next()
 	
-	while(current_file_name.empty() == false):
+	while(!current_file_name.empty()):
 		if(p_directory.current_is_dir()):
 			if(current_file_name != "." and current_file_name != ".."):
 				var sub_directory : Directory = Directory.new()
@@ -61,7 +61,7 @@ static func delete_dir_and_contents(p_directory : Directory, current_dir_path : 
 					else:
 						all_deleted = FAILED
 		else:
-			if(p_directory.file_exists(current_dir_path + '/' + current_file_name) == true):
+			if(p_directory.file_exists(current_dir_path + '/' + current_file_name)):
 				if(p_directory.remove(current_dir_path + '/' + current_file_name) == FAILED):
 					all_deleted = FAILED
 				

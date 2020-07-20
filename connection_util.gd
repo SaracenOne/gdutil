@@ -3,7 +3,7 @@ tool
 
 static func connect_signal_table(p_signal_table : Array, p_target : Object) -> void:
 	for current_signal in p_signal_table:
-		var node : Node = p_target.get_node_or_null(NodePath("/root/" + current_signal.singleton))
+		var node : Node = p_target.get_node_or_null(NodePath("/root/%s" % current_signal.singleton))
 		if node:
 			if node.connect(current_signal.signal, p_target, current_signal.method) != OK:
 				printerr("{singleton}: {signal} could not be connected!".format(
@@ -14,7 +14,7 @@ static func connect_signal_table(p_signal_table : Array, p_target : Object) -> v
 				
 static func disconnect_signal_table(p_signal_table : Array, p_target : Object) -> void:
 	for current_signal in p_signal_table:
-		var node : Node = p_target.get_node_or_null(NodePath("/root/" + current_signal.singleton))
+		var node : Node = p_target.get_node_or_null(NodePath("/root/%s" % current_signal.singleton))
 		if node:
 			if node.is_connected(current_signal.signal, p_target, current_signal.method):
 				if node.disconnect(current_signal.signal, p_target, current_signal.method) != OK:

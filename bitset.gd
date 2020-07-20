@@ -13,7 +13,7 @@ func set_bit(p_bit_index : int, p_enable : bool) -> void:
 	var byte_position : int = p_bit_index / 8
 	var remainder : int = p_bit_index % 8
 	
-	if p_enable == true:
+	if p_enable:
 		bitset[byte_position] |= (1 << remainder)
 	else:
 		bitset[byte_position] &= ~(1 << remainder)
