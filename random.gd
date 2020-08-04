@@ -65,13 +65,13 @@ const base64_table = [
 	"_",
 	"-",
 ]
-	
+
 # Ad-hoc base64 generator
-static func generate_unique_id(p_size : int) -> String:
-	var string : String = ""
-	
+static func generate_unique_id(p_size: int) -> String:
+	var string: String = ""
+
 	for i in range(0, p_size):
 		randomize()
 		string += base64_table[randi() % 64]
-		
+
 	return string

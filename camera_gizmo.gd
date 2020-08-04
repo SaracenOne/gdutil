@@ -2,56 +2,62 @@ extends EditorSpatialGizmo
 
 const immediate_shape_util_const = preload("immediate_shape_util.gd")
 
-var plugin : EditorSpatialGizmoPlugin = null
-var camera : Node = null
-var material : SpatialMaterial = null
+var plugin: EditorSpatialGizmoPlugin = null
+var camera: Node = null
+var material: SpatialMaterial = null
 
-static func _find_closest_angle_to_half_pi_arc(p_from : Vector3, p_to : Vector3, p_arc_radius : float, p_arc_xform : Transform) -> float:
-	var arc_test_points : int = 64
-	var min_d : int = 1e20
-	var min_p : Vector3
+static func _find_closest_angle_to_half_pi_arc(
+	p_from: Vector3, p_to: Vector3, p_arc_radius: float, p_arc_xform: Transform
+) -> float:
+	var arc_test_points: int = 64
+	var min_d: int = 1e20
+	var min_p: Vector3
 
 	for i in range(0, arc_test_points):
-		var a : float = i * PI * 0.5 / arc_test_points
-		var an : float = (i + 1) * PI * 0.5 / arc_test_points
-		var p : Vector3 = Vector3(cos(a), 0, -sin(a)) * p_arc_radius
-		var n : Vector3 = Vector3(cos(an), 0,- sin(an)) * p_arc_radius
+		var a: float = i * PI * 0.5 / arc_test_points
+		var an: float = (i + 1) * PI * 0.5 / arc_test_points
+		var p: Vector3 = Vector3(cos(a), 0, -sin(a)) * p_arc_radius
+		var n: Vector3 = Vector3(cos(an), 0, -sin(an)) * p_arc_radius
 
-		var r : PoolVector3Array = Geometry.get_closest_points_between_segments(p, n, p_from, p_to)
-		var ra : Vector3 = r[0]
-		var rb : Vector3 = r[1]
+		var r: PoolVector3Array = Geometry.get_closest_points_between_segments(p, n, p_from, p_to)
+		var ra: Vector3 = r[0]
+		var rb: Vector3 = r[1]
 
-		var d : float = ra.distance_to(rb)
-		if(d < min_d):
-			min_d=d
-			min_p=ra
+		var d: float = ra.distance_to(rb)
+		if d < min_d:
+			min_d = d
+			min_p = ra
 
-	var a : float = Vector2(min_p.x, -min_p.z).angle()
+	var a: float = Vector2(min_p.x, -min_p.z).angle()
 	return a * 180.0 / PI
 
-func get_handle_name(p_idx : int) -> String:
+
+func get_handle_name(p_idx: int) -> String:
 	return "FOV"
 
-func get_handle_value(p_idx : int) -> int:
+
+func get_handle_value(p_idx: int) -> int:
 	return camera.get_fov()
 
-func set_handle(p_idx : int, p_camera : Camera, p_point : Vector2) -> void:
-	var gt : Transform = camera.get_global_transform()
+
+func set_handle(p_idx: int, p_camera: Camera, p_point: Vector2) -> void:
+	var gt: Transform = camera.get_global_transform()
 	gt = gt.orthonormalized()
-	var gi : Transform = gt.affine_inverse()
+	var gi: Transform = gt.affine_inverse()
 
-	var ray_from : Vector3 = p_camera.project_ray_origin(p_point)
-	var ray_dir : Vector3 = p_camera.project_ray_normal(p_point)
+	var ray_from: Vector3 = p_camera.project_ray_origin(p_point)
+	var ray_dir: Vector3 = p_camera.project_ray_normal(p_point)
 
-	var s : Array = [gi.xform(ray_from), gi.xform(ray_from + ray_dir * 4096)]
+	var s: Array = [gi.xform(ray_from), gi.xform(ray_from + ray_dir * 4096)]
 
 	gt = camera.get_global_transform()
-	var a : float = _find_closest_angle_to_half_pi_arc(s[0], s[1], 1.0, gt)
-	camera.set("fov", a);
+	var a: float = _find_closest_angle_to_half_pi_arc(s[0], s[1], 1.0, gt)
+	camera.set("fov", a)
 	camera.property_list_changed_notify()
 
-func commit_handle(p_idx : int, p_restore : bool, p_cancel : bool = false) -> void:
-	if (p_cancel):
+
+func commit_handle(p_idx: int, p_restore: bool, p_cancel: bool = false) -> void:
+	if p_cancel:
 		camera.set("fov", p_restore)
 	else:
 		var ur = plugin.get_undo_redo()
@@ -61,7 +67,8 @@ func commit_handle(p_idx : int, p_restore : bool, p_cancel : bool = false) -> vo
 		ur.commit_action()
 	camera.property_list_changed_notify()
 
-func add_triangle(p_lines : PoolVector3Array, m_a : Vector3, m_b : Vector3, m_c : Vector3) -> PoolVector3Array:
+
+func add_triangle(p_lines: PoolVector3Array, m_a: Vector3, m_b: Vector3, m_c: Vector3) -> PoolVector3Array:
 	p_lines.push_back(m_a)
 	p_lines.push_back(m_b)
 	p_lines.push_back(m_b)
@@ -71,17 +78,18 @@ func add_triangle(p_lines : PoolVector3Array, m_a : Vector3, m_b : Vector3, m_c 
 
 	return p_lines
 
+
 func redraw() -> void:
 	clear()
-	var lines : Array = []
-	var handles : Array = []
+	var lines: Array = []
+	var handles: Array = []
 
-	var fov : float = camera.get_fov()
+	var fov: float = camera.get_fov()
 
-	var side : Vector3 = Vector3(sin(deg2rad(fov)), 0, -cos(deg2rad(fov)))
-	var nside : Vector3 = side
+	var side: Vector3 = Vector3(sin(deg2rad(fov)), 0, -cos(deg2rad(fov)))
+	var nside: Vector3 = side
 	nside.x = -nside.x
-	var up : Vector3 = Vector3(0, side.x, 0)
+	var up: Vector3 = Vector3(0, side.x, 0)
 
 	lines = add_triangle(lines, Vector3(), side + up, side - up)
 	lines = add_triangle(lines, Vector3(), nside + up, nside - up)
@@ -91,14 +99,15 @@ func redraw() -> void:
 	handles.push_back(side)
 	side.x *= 0.25
 	nside.x *= 0.25
-	var tup : Vector3 = Vector3(0, up.y * 3 / 2, side.z)
+	var tup: Vector3 = Vector3(0, up.y * 3 / 2, side.z)
 	lines = add_triangle(lines, tup, side + up, nside + up)
 
 	add_lines(lines, material)
 	add_collision_segments(lines)
 	add_handles(handles, material)
 
-func _init(p_camera : Node, p_plugin : EditorSpatialGizmoPlugin, p_color : Color) -> void:
+
+func _init(p_camera: Node, p_plugin: EditorSpatialGizmoPlugin, p_color: Color) -> void:
 	camera = p_camera
 	plugin = p_plugin
 	set_spatial_node(camera)

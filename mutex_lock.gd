@@ -1,11 +1,13 @@
 extends Reference
 
-var mutex : Mutex = null
+var mutex: Mutex = null
 
-func _init(p_mutex : Mutex):
+
+func _init(p_mutex: Mutex):
 	mutex = p_mutex
 	mutex.lock()
-	
+
+
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_PREDELETE:
