@@ -3,6 +3,12 @@ extends Reference
 var bitset: PoolByteArray = PoolByteArray()
 var first_available_index: int = 0
 
+func is_empty() -> bool:
+	for i in range(0, bitset.size()):
+		if bitset[0] != 0:
+			return false
+			
+	return true
 
 func get_bit(p_bit_index: int) -> bool:
 	var byte_position: int = p_bit_index / 8
