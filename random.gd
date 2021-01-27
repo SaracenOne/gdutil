@@ -70,8 +70,9 @@ const base64_table = [
 static func generate_unique_id(p_size: int) -> String:
 	var string: String = ""
 
+	randomize()
+
 	for i in range(0, p_size):
-		randomize()
 		string += base64_table[randi() % 64]
 
 	return string
